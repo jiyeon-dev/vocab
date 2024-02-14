@@ -1,5 +1,7 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import RootLayout from "./pages/Root";
+import { SideMenuProvider } from "./contexts/SideMenu";
+import { ThemeProvider } from "./contexts/Theme";
 
 const router = createBrowserRouter([
   {
@@ -10,5 +12,11 @@ const router = createBrowserRouter([
 ]);
 
 export default function App() {
-  return <RouterProvider router={router}></RouterProvider>;
+  return (
+    <ThemeProvider>
+      <SideMenuProvider>
+        <RouterProvider router={router}></RouterProvider>
+      </SideMenuProvider>
+    </ThemeProvider>
+  );
 }
