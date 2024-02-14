@@ -1,20 +1,51 @@
 import CategoryCard from "@/components/CategoryCard";
+import { getCategories } from "@/util/http";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import useIntersectionObserver from "@/hooks/useIntersectionObserver";
+import { useRef, useState } from "react";
+import { Category } from "@/types";
 
 export default function CategoryPage() {
-  const img =
-    "https://firebasestorage.googleapis.com/v0/b/react-voca-455e7.appspot.com/o/hackers_yellow.png?alt=media&token=9586bf8d-435f-4794-94d9-ebb5554672ff";
+  const [categories, setCategories] = useState<Category[]>([]);
+  const target = useRef<HTMLDivElement>(null);
 
-  const category = {
-    imageURL: img,
-    name: "해커스 노랑이",
-    description: "해커스 토익 보카 기출문제",
-  };
+  const { fetchNextPage, hasNextPage, isLoading } = useInfiniteQuery({
+    initialPageParam: undefined,
+    queryKey: ["category"],
+    queryFn: async ({ pageParam = 0 }) => {
+      const querySnapshot = await getCategories(pageParam);
+      const newData: Category[] = querySnapshot.docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+      }));
+      setCategories((prev) => [...prev, ...newData]);
+      return querySnapshot;
+    },
+    getNextPageParam: (querySnapshot) => {
+      if (!querySnapshot?.docs) return undefined;
+      const lastPageParam = querySnapshot.docs[querySnapshot.docs.length - 1];
+      if (querySnapshot.size < 6) {
+        return undefined;
+      }
+      return lastPageParam;
+    },
+  });
+
+  useIntersectionObserver({
+    root: null,
+    target: target,
+    onIntersect: fetchNextPage,
+    enabled: hasNextPage,
+  });
 
   return (
-    <div className='grid gap-4'>
-      <CategoryCard category={category} />
-      <CategoryCard />
-      <CategoryCard />
-    </div>
+    <>
+      <div className='grid gap-4'>
+        {categories.map((category) => (
+          <CategoryCard key={category.id} category={category} />
+        ))}
+      </div>
+      <div ref={target} />
+    </>
   );
 }

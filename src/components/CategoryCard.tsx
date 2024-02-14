@@ -1,4 +1,8 @@
-export default function CategoryCard({ category }) {
+type CategoryCardProps = {
+  category: Category;
+};
+
+export default function CategoryCard({ category }: CategoryCardProps) {
   const style = {
     background: `url('${category?.imageURL}'), url('/no-image.jpeg')`,
     backgroundSize: "cover",
@@ -7,7 +11,12 @@ export default function CategoryCard({ category }) {
   };
 
   return (
-    <div className='grid grid-cols-3 grid-flow-col rounded-lg border bg-card text-card-foreground shadow-sm h-36'>
+    <div
+      className='grid grid-cols-3 grid-flow-col rounded-lg border bg-card text-card-foreground shadow-sm h-36'
+      onClick={() => {
+        console.log("card");
+      }}
+    >
       <div className='h-36 rounded-s-lg' style={style}></div>
 
       <div className='col-span-2 m-5'>
