@@ -6,6 +6,7 @@ import { ThemeProvider } from "./contexts/Theme";
 import CategoryPage from "./pages/Category";
 import ChapterPage from "./pages/Chapter";
 import { queryClient } from "./util/http";
+import VocabularyPage from "./pages/Vocabulary";
 
 const router = createBrowserRouter([
   {
@@ -19,6 +20,10 @@ const router = createBrowserRouter([
       {
         path: ":id",
         element: <ChapterPage />,
+      },
+      {
+        path: ":categoryId/:chapterId",
+        element: <VocabularyPage />,
       },
     ],
   },

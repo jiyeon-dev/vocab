@@ -54,3 +54,20 @@ export const getChapters = async ({ categoryId }): Promise<Chapter[]> => {
 
   return data;
 };
+
+/**
+ * 챕터에 속한 단어 리스트 조회
+ * @param param0 chapterId
+ * @returns
+ */
+export const getVocabularies = async ({ chapterId }): Promise<Vocabulary[]> => {
+  const q = query(
+    collection(db, "vocabulary"),
+    where("chapterId", "==", chapterId)
+  );
+  const querySnapshot = await getDocs(q);
+  return querySnapshot.docs.map((doc) => ({
+    id: doc.id,
+    ...doc.data(),
+  }));
+};

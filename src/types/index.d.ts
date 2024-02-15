@@ -15,3 +15,11 @@ type Chapter = {
   timestamp: Timestamp;
   categoryId: Category.id;
 };
+
+type Vocabulary = {
+  id: string;
+  name: string;
+  meanings: string;
+  timestamp: Timestamp;
+  chapterId: Chapter.id;
+};
