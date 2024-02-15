@@ -7,7 +7,9 @@ import {
   limit,
   startAfter,
   getDocs,
+  where,
 } from "firebase/firestore";
+import { Chapter } from "@/types";
 
 export const queryClient = new QueryClient();
 
@@ -27,4 +29,28 @@ export const getCategories = async (pageParam) => {
       );
   const querySnapshot = await getDocs(q);
   return querySnapshot;
+};
+
+/**
+ * 카테고리에 속한 챕터 리스트 조회
+ * @param param0 categoryId
+ * @returns
+ */
+export const getChapters = async ({ categoryId }): Promise<Chapter[]> => {
+  const q = query(
+    collection(db, "chapter"),
+    where("categoryId", "==", categoryId)
+  );
+  const querySnapshot = await getDocs(q);
+  const data: Chapter[] = querySnapshot.docs.map((doc) => ({
+    id: doc.id,
+    ...doc.data(),
+  }));
+
+  // 데이터 오름차순 정렬
+  data.sort((a, b) => {
+    return a.order - b.order;
+  });
+
+  return data;
 };

@@ -7,3 +7,11 @@ type Category = {
   description: string;
   createDate: Timestamp;
 };
+
+type Chapter = {
+  id: string;
+  name: string;
+  order: number;
+  timestamp: Timestamp;
+  categoryId: Category.id;
+};

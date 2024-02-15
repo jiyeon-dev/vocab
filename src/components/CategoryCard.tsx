@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 type CategoryCardProps = {
   category: Category;
 };
@@ -11,11 +13,9 @@ export default function CategoryCard({ category }: CategoryCardProps) {
   };
 
   return (
-    <div
+    <Link
+      to={category.id}
       className='grid grid-cols-3 grid-flow-col rounded-lg border bg-card text-card-foreground shadow-sm h-36'
-      onClick={() => {
-        console.log("card");
-      }}
     >
       <div className='h-36 rounded-s-lg' style={style}></div>
 
@@ -28,6 +28,6 @@ export default function CategoryCard({ category }: CategoryCardProps) {
           {category?.description}
         </p>
       </div>
-    </div>
+    </Link>
   );
 }

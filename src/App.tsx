@@ -4,6 +4,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { SideMenuProvider } from "./contexts/SideMenu";
 import { ThemeProvider } from "./contexts/Theme";
 import CategoryPage from "./pages/Category";
+import ChapterPage from "./pages/Chapter";
 import { queryClient } from "./util/http";
 
 const router = createBrowserRouter([
@@ -14,6 +15,10 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <CategoryPage />,
+      },
+      {
+        path: ":id",
+        element: <ChapterPage />,
       },
     ],
   },
