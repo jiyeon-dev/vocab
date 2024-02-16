@@ -2,6 +2,7 @@ import { Button } from "../ui/button";
 import { MdOutlineMenu } from "react-icons/md";
 import ThemeToggleButton from "./ThemeToggleButton";
 import { useSideMenuDispatch } from "@/contexts/SideMenu";
+import { TbVocabulary } from "react-icons/tb";
 
 export default function Navigation() {
   const dispatch = useSideMenuDispatch();
@@ -12,7 +13,10 @@ export default function Navigation() {
       <Button variant='ghost' className='rounded-full' onClick={toggleMenu}>
         <MdOutlineMenu size={24} />
       </Button>
-      <h1 className='grow'>Category</h1>
+      <h1 className='grow flex items-center justify-center'>
+        <TbVocabulary size={24} className='mr-3' />
+        <span className='text-xl font-bold'>My Voca</span>
+      </h1>
       <ThemeToggleButton />
     </header>
   );
