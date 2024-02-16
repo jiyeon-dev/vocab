@@ -22,7 +22,7 @@ export default function ItemCard({ item }) {
 
   return (
     <div
-      className={`${styles.card} shadow-sm h-64 m-10 cursor-pointer`}
+      className={`${styles.card} shadow-sm h-64 m-5 cursor-pointer`}
       style={{ transform: rotate ? "rotateX(180deg)" : "rotateX(0deg)" }}
       onDoubleClick={(event) => handleFlipCard(event)}
     >

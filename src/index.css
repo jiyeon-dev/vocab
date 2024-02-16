@@ -106,6 +106,7 @@ main {
   background-color: var(--background);
   box-shadow: 0px 5px 10px 0px var(--shadow-color);
   position: relative;
+  overflow-y: hidden;
 }
 
 @media (max-width: 1024px) {

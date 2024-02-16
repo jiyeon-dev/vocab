@@ -15,6 +15,7 @@ export default function Carousel({ data }) {
     infinite: true,
     speed: 300,
     arrows: false,
+    lazyLoad: true,
     beforeChange: (_, next) => setSlideIndex(next + 1),
   };
 
@@ -30,7 +31,7 @@ export default function Carousel({ data }) {
   };
 
   return (
-    <div>
+    <>
       <Slider
         ref={(slider) => {
           sliderRef = slider;
@@ -50,7 +51,7 @@ export default function Carousel({ data }) {
       </div>
 
       {/* Slider control buttons */}
-      <div className='row-span-2 flex justify-around items-start mb-10 mx-16'>
+      <div className='row-span-2 flex justify-around items-start mb-5 mx-16'>
         <Button
           variant='ghost'
           className='rounded-full w-16 h-16'
@@ -73,6 +74,6 @@ export default function Carousel({ data }) {
           <FaArrowRight size={30} />
         </Button>
       </div>
-    </div>
+    </>
   );
 }
