@@ -1,13 +1,14 @@
 import { getVocabularies } from "@/util/http";
 import { useQuery } from "@tanstack/react-query";
-import { useParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import Loader from "@/components/Loader";
 import Carousel from "@/components/Carousel";
 import Helper from "@/components/Helper";
 import { toast } from "sonner";
 
 export default function VocabularyPage() {
-  const { categoryId, chapterId } = useParams();
+  const [searchParams] = useSearchParams();
+  const chapterId = searchParams.get("chapterId");
 
   const { data, isPending, isError, error } = useQuery({
     queryKey: ["vocabulary", { chapterId: chapterId }],

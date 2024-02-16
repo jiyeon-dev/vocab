@@ -152,6 +152,9 @@ aside[data-state="closed"] {
   visibility: hidden;
   transform: translate3d(-100%, 0, 0);
 }
+aside[data-state="closed"] > div {
+  visibility: hidden;
+}
 #backdrop[data-state="closed"] {
   visibility: hidden;
 }

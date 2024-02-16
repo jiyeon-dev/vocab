@@ -14,7 +14,7 @@ export default function CategoryCard({ category }: CategoryCardProps) {
 
   return (
     <Link
-      to={category.id}
+      to={`/chapter?categoryId=${category.id}`}
       className='grid grid-cols-3 grid-flow-col rounded-lg border bg-card text-card-foreground shadow-sm h-36'
     >
       <div className='h-36 rounded-s-lg' style={style}></div>

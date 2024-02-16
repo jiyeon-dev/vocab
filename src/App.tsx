@@ -20,11 +20,12 @@ const router = createBrowserRouter([
         element: <CategoryPage />,
       },
       {
-        path: ":id",
+        path: "chapter",
+        id: "chapter",
         element: <ChapterPage />,
       },
       {
-        path: ":categoryId/:chapterId",
+        path: "chapter/:name",
         element: <VocabularyPage />,
       },
     ],

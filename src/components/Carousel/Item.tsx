@@ -6,10 +6,13 @@ import {
   getVocabulary,
   saveVocabulary,
 } from "@/util/localStorage";
-import { useParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 
 export default function ItemCard({ item }) {
-  const { categoryId, chapterId } = useParams();
+  const [searchParams] = useSearchParams();
+  const categoryId = searchParams.get("categoryId");
+  const chapterId = searchParams.get("chapterId");
+
   const [rotate, setRotate] = useState(false);
   // 저장된 단어인지 체크
   const favoriteList = getVocabulary(categoryId, chapterId);
