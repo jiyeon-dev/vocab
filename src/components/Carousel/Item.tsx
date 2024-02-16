@@ -26,7 +26,6 @@ export default function ItemCard({ item }) {
 
   const handleFavorites = (event) => {
     event.stopPropagation();
-    console.log(item.id);
     setFavorite((prev) => {
       if (prev) {
         deleteVocabulary(categoryId, chapterId, item.id);

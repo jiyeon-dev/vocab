@@ -7,11 +7,13 @@ import CategoryPage from "./pages/Category";
 import ChapterPage from "./pages/Chapter";
 import { queryClient } from "./util/http";
 import VocabularyPage from "./pages/Vocabulary";
+import ErrorPage from "./pages/Error";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <RootLayout />,
+    errorElement: <ErrorPage />,
     children: [
       {
         index: true,

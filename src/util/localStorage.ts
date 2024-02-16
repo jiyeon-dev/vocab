@@ -1,3 +1,5 @@
+import { toast } from "sonner";
+
 // 키 생성
 const generateKey = (categoryId: string, chapterId: string): string => {
   return `${categoryId}||${chapterId}`;
@@ -26,7 +28,7 @@ const saveVocabulary = (
       localStorage.setItem(key, JSON.stringify([value]));
     }
   } catch (error) {
-    throw new Error("Error adding from localStorage");
+    toast.error("Error adding from localStorage");
   }
 };
 
@@ -50,7 +52,7 @@ const deleteVocabulary = (
       localStorage.setItem(key, JSON.stringify(newValues));
     }
   } catch (error) {
-    throw new Error("Error deleting from localStorage");
+    toast.error("Error deleting from localStorage");
   }
 };
 

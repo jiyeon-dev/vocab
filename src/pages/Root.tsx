@@ -1,10 +1,9 @@
 import { Outlet } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import SideMenu from "@/components/Navigation/SideMenu";
+import { Toaster } from "@/components/ui/sonner";
 
 export default function RootLayout() {
-  console.log("re-render - RootLayout");
-
   return (
     <main>
       <Navigation />
@@ -12,6 +11,8 @@ export default function RootLayout() {
         <Outlet />
       </div>
       <SideMenu />
+
+      <Toaster position='top-center' visibleToasts='1' richColors />
     </main>
   );
 }

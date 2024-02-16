@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import Loader from "@/components/Loader";
 import Carousel from "@/components/Carousel";
 import Helper from "@/components/Helper";
+import { toast } from "sonner";
 
 export default function VocabularyPage() {
   const { categoryId, chapterId } = useParams();
@@ -13,6 +14,11 @@ export default function VocabularyPage() {
     queryFn: ({ queryKey }) => getVocabularies({ ...queryKey[1] }),
     staleTime: 5000,
   });
+
+  if (isError) {
+    toast.error(`[${error.name}] ${error.message}`);
+    return;
+  }
 
   if (isPending) {
     return <Loader />;

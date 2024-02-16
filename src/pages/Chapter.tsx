@@ -5,6 +5,7 @@ import Loader from "@/components/Loader";
 import { BsThreeDots } from "react-icons/bs";
 import { Button } from "@/components/ui/button";
 import { Chapter } from "@/types";
+import { toast } from "sonner";
 
 export default function ChapterPage() {
   const { id } = useParams();
@@ -19,6 +20,11 @@ export default function ChapterPage() {
     event.preventDefault();
     console.log(value);
   };
+
+  if (isError) {
+    toast.error(`[${error.name}] ${error.message}`);
+    return;
+  }
 
   if (isPending) {
     return <Loader />;
