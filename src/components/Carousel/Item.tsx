@@ -1,10 +1,21 @@
 import { FaStar } from "react-icons/fa6";
 import styles from "./carousel.module.css";
 import { useState } from "react";
+import {
+  deleteVocabulary,
+  getVocabulary,
+  saveVocabulary,
+} from "@/util/localStorage";
+import { useParams } from "react-router-dom";
 
 export default function ItemCard({ item }) {
+  const { categoryId, chapterId } = useParams();
   const [rotate, setRotate] = useState(false);
-  const [favorite, setFavorite] = useState(false);
+  // 저장된 단어인지 체크
+  const favoriteList = getVocabulary(categoryId, chapterId);
+  const isFavorite =
+    typeof favoriteList === "object" ? favoriteList?.includes(item.id) : false;
+  const [favorite, setFavorite] = useState(isFavorite);
 
   // 카드 뒤집기
   const handleFlipCard = (event) => {
@@ -15,9 +26,18 @@ export default function ItemCard({ item }) {
 
   const handleFavorites = (event) => {
     event.stopPropagation();
-    setFavorite((prev) => !prev); // TODO: localhost에 저장
+    console.log(item.id);
+    setFavorite((prev) => {
+      if (prev) {
+        deleteVocabulary(categoryId, chapterId, item.id);
+      } else {
+        saveVocabulary(categoryId, chapterId, item.id);
+      }
+      return !prev;
+    });
   };
 
+  // 단어 뜻 줄바꿈
   const meanings = item.meanings.split(/[,.]/);
 
   return (
