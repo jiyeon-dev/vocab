@@ -12,7 +12,7 @@ export default function RootLayout() {
       </div>
       <SideMenu />
 
-      <Toaster position='top-center' visibleToasts='1' richColors />
+      <Toaster position='top-center' visibleToasts={1} richColors />
     </main>
   );
 }

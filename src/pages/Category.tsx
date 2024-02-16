@@ -14,8 +14,9 @@ export default function CategoryPage() {
     useInfiniteQuery({
       initialPageParam: undefined,
       queryKey: ["category"],
-      queryFn: async ({ pageParam = 0 }) => {
-        const querySnapshot = await getCategories(pageParam);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      queryFn: async ({ pageParam }: any) => {
+        const querySnapshot = await getCategories(pageParam || null);
         const newData: Category[] = querySnapshot.docs.map((doc) => ({
           ...doc.data(),
           id: doc.id,

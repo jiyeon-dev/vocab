@@ -1,17 +1,18 @@
 import { FaStar } from "react-icons/fa6";
 import styles from "./carousel.module.css";
-import { useState } from "react";
+import { MouseEvent, useState } from "react";
 import {
   deleteVocabulary,
   getVocabulary,
   saveVocabulary,
 } from "@/util/localStorage";
 import { useSearchParams } from "react-router-dom";
+import { Vocabulary } from "@/types";
 
-export default function ItemCard({ item }) {
+export default function ItemCard({ item }: { item: Vocabulary }) {
   const [searchParams] = useSearchParams();
-  const categoryId = searchParams.get("categoryId");
-  const chapterId = searchParams.get("chapterId");
+  const categoryId = searchParams.get("categoryId") as string;
+  const chapterId = searchParams.get("chapterId") as string;
 
   const [rotate, setRotate] = useState(false);
   // 저장된 단어인지 체크
@@ -21,13 +22,13 @@ export default function ItemCard({ item }) {
   const [favorite, setFavorite] = useState(isFavorite);
 
   // 카드 뒤집기
-  const handleFlipCard = (event) => {
+  const handleFlipCard = (event: React.MouseEvent<HTMLDivElement>) => {
     event.preventDefault();
-    if (event.target.tagName === "path") return;
+    if ((event.target as HTMLDivElement).tagName === "path") return;
     setRotate((prev) => !prev);
   };
 
-  const handleFavorites = (event) => {
+  const handleFavorites = (event: MouseEvent) => {
     event.stopPropagation();
     setFavorite((prev) => {
       if (prev) {

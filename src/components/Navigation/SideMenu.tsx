@@ -1,6 +1,6 @@
 import { useSideMenuState, useSideMenuDispatch } from "@/contexts/SideMenu";
 import { NavLink, useLocation, useSearchParams } from "react-router-dom";
-import { FaGithub, FaBloggerB } from "react-icons/fa";
+import { FaGithub } from "react-icons/fa";
 
 export default function SideMenu() {
   const { openMenu } = useSideMenuState();

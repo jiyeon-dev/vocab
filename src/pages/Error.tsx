@@ -1,7 +1,7 @@
 import { useRouteError } from "react-router-dom";
 
 export default function ErrorPage() {
-  const error = useRouteError();
+  const error: unknown = useRouteError();
 
   return (
     <main>
@@ -10,11 +10,12 @@ export default function ErrorPage() {
           className='inline-block mr-5 pr-5 text-2xl'
           style={{ borderRight: "1px solid" }}
         >
-          {error.status}
+          {(error as { status?: number })?.status}
         </h1>
         <div className='inline-block'>
           <h2 className='text-sm font-normal m-0'>
-            {error.message || "Error"}
+            {(error as Error)?.message ||
+              (error as { statusText?: string })?.statusText}
           </h2>
         </div>
       </div>

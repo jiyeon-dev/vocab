@@ -12,7 +12,8 @@ export default function VocabularyPage() {
 
   const { data, isPending, isError, error } = useQuery({
     queryKey: ["vocabulary", { chapterId: chapterId }],
-    queryFn: ({ queryKey }) => getVocabularies({ ...queryKey[1] }),
+    queryFn: ({ queryKey }) =>
+      getVocabularies({ ...(queryKey[1] as { chapterId: string }) }),
     staleTime: 5000,
   });
 

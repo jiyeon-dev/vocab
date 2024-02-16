@@ -13,11 +13,15 @@ export default function ChapterPage() {
 
   const { data, isPending, isError, error } = useQuery({
     queryKey: ["chapter", { categoryId: id }],
-    queryFn: ({ queryKey }) => getChapters({ ...queryKey[1] }),
+    queryFn: ({ queryKey }) =>
+      getChapters({ ...(queryKey[1] as { categoryId: string }) }),
     staleTime: 5000,
   });
 
-  const handleMoreClick = (event: MouseEvent, value: Chapter) => {
+  const handleMoreClick = (
+    event: React.MouseEvent<HTMLButtonElement>,
+    value: Chapter
+  ) => {
     event.preventDefault();
     console.log(value);
   };

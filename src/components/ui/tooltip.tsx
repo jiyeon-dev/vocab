@@ -31,8 +31,12 @@ const ButtonTooltip = ({
   children,
   text,
   sideOffset = 0,
-  arrow = false,
   ...props
+}: {
+  children: React.ReactNode;
+  text: string;
+  sideOffset: number;
+  onClick?: () => void;
 }) => {
   return (
     <TooltipProvider delayDuration={200}>
@@ -41,7 +45,6 @@ const ButtonTooltip = ({
 
         <TooltipContent side='bottom' sideOffset={sideOffset}>
           <p>{text}</p>
-          {arrow && <TooltipArrow />}
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>

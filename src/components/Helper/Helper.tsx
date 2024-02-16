@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "@/components/Carousel/carousel.module.css";
 
-export function Helper({ onHelper }) {
+export function Helper({ onHelper }: { onHelper: (value: boolean) => void }) {
   return (
     <main
       className='absolute top-0 left-0 h-full w-full text-slate-500 font-bold select-none cursor-pointer'

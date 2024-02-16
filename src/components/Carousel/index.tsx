@@ -1,44 +1,46 @@
-import { useRef, useState } from "react";
-import Slider from "react-slick";
+import { useState, useMemo } from "react";
+import Slider, { Settings } from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import ItemCard from "./Item";
 import { Button } from "../ui/button";
 import { FaShuffle, FaArrowLeft, FaArrowRight } from "react-icons/fa6";
+import { Vocabulary } from "@/types";
 
-export default function Carousel({ data }) {
-  let sliderRef = useRef(null);
+export default function Carousel({ data }: { data: Vocabulary[] }) {
+  const [slider, setSlider] = useState<Slider>();
   const [slideIndex, setSlideIndex] = useState(1);
 
-  const settings = {
-    dot: false,
-    infinite: true,
-    speed: 300,
-    arrows: false,
-    lazyLoad: true,
-    beforeChange: (_, next) => setSlideIndex(next + 1),
-  };
+  const settings = useMemo<Settings>(
+    () => ({
+      infinite: true,
+      dots: false,
+      speed: 300,
+      arrows: false,
+      beforeChange: (_: number, next: number) => setSlideIndex(next + 1),
+    }),
+    []
+  );
 
   const handleNext = () => {
-    sliderRef.slickNext();
+    (slider as Slider).slickNext();
   };
   const handlePrev = () => {
-    sliderRef.slickPrev();
+    (slider as Slider).slickPrev();
   };
   const handleShuffle = () => {
     const random = Math.floor(Math.random() * data.length); // 0 ~ data.length
-    sliderRef.slickGoTo(random);
+    (slider as Slider).slickGoTo(random);
   };
 
   return (
     <>
       <Slider
-        ref={(slider) => {
-          sliderRef = slider;
-        }}
+        asNavFor={slider}
+        ref={(sliderRef: Slider) => setSlider(sliderRef)}
         {...settings}
       >
-        {data.map((item) => (
+        {data.map((item: Vocabulary) => (
           <ItemCard key={item.id} item={item} />
         ))}
       </Slider>

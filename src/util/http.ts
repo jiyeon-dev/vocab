@@ -9,7 +9,7 @@ import {
   getDocs,
   where,
 } from "firebase/firestore";
-import { Chapter } from "@/types";
+import { Chapter, Vocabulary } from "@/types";
 
 export const queryClient = new QueryClient();
 
@@ -18,7 +18,7 @@ export const queryClient = new QueryClient();
  * @param pageParam
  * @returns
  */
-export const getCategories = async (pageParam) => {
+export const getCategories = async (pageParam: object | null) => {
   const q = !pageParam
     ? query(collection(db, "category"), orderBy("createDate", "desc"), limit(6))
     : query(
@@ -36,7 +36,11 @@ export const getCategories = async (pageParam) => {
  * @param param0 categoryId
  * @returns
  */
-export const getChapters = async ({ categoryId }): Promise<Chapter[]> => {
+export const getChapters = async ({
+  categoryId,
+}: {
+  categoryId: string;
+}): Promise<Chapter[]> => {
   const q = query(
     collection(db, "chapter"),
     where("categoryId", "==", categoryId)
@@ -44,6 +48,7 @@ export const getChapters = async ({ categoryId }): Promise<Chapter[]> => {
   const querySnapshot = await getDocs(q);
   const data: Chapter[] = querySnapshot.docs.map((doc) => ({
     id: doc.id,
+    order: doc.data().oder,
     ...doc.data(),
   }));
 
@@ -60,7 +65,11 @@ export const getChapters = async ({ categoryId }): Promise<Chapter[]> => {
  * @param param0 chapterId
  * @returns
  */
-export const getVocabularies = async ({ chapterId }): Promise<Vocabulary[]> => {
+export const getVocabularies = async ({
+  chapterId,
+}: {
+  chapterId: string;
+}): Promise<Vocabulary[]> => {
   const q = query(
     collection(db, "vocabulary"),
     where("chapterId", "==", chapterId)
@@ -68,6 +77,8 @@ export const getVocabularies = async ({ chapterId }): Promise<Vocabulary[]> => {
   const querySnapshot = await getDocs(q);
   return querySnapshot.docs.map((doc) => ({
     id: doc.id,
+    name: doc.data().name,
+    meanings: doc.data().meanings,
     ...doc.data(),
   }));
 };
