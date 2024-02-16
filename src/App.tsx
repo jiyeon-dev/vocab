@@ -8,6 +8,7 @@ import ChapterPage from "./pages/Chapter";
 import { queryClient } from "./util/http";
 import VocabularyPage from "./pages/Vocabulary";
 import ErrorPage from "./pages/Error";
+import NewCategory from "./pages/NewCategory";
 
 const router = createBrowserRouter([
   {
@@ -20,12 +21,22 @@ const router = createBrowserRouter([
         element: <CategoryPage />,
       },
       {
-        path: "chapter",
-        id: "chapter",
+        path: "category/new",
+        element: <NewCategory />,
+      },
+    ],
+  },
+  {
+    path: "/chapter",
+    element: <RootLayout />,
+    errorElement: <ErrorPage />,
+    children: [
+      {
+        index: true,
         element: <ChapterPage />,
       },
       {
-        path: "chapter/:name",
+        path: ":name",
         element: <VocabularyPage />,
       },
     ],

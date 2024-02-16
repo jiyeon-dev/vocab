@@ -5,6 +5,9 @@ import useIntersectionObserver from "@/hooks/useIntersectionObserver";
 import { useRef, useState } from "react";
 import { Category } from "@/types";
 import Loader from "@/components/Loader";
+import { Button } from "@/components/ui/button";
+import { CiCirclePlus } from "react-icons/ci";
+import { Link } from "react-router-dom";
 
 export default function CategoryPage() {
   const [categories, setCategories] = useState<Category[]>([]);
@@ -41,15 +44,29 @@ export default function CategoryPage() {
     enabled: hasNextPage,
   });
 
+  if (isLoading || isFetchingNextPage) {
+    return <Loader />;
+  }
+
   return (
     <>
-      <div className='grid gap-4'>
+      <div
+        className='grid gap-4 overflow-y-auto'
+        style={{ height: "calc(100% - var(--header-height))" }}
+      >
         {categories.map((category, index) => (
           <CategoryCard key={`${category.id}-${index}`} category={category} />
         ))}
       </div>
-      {(isLoading || isFetchingNextPage) && <Loader />}
       <div ref={target} />
+
+      <div className='flex items-center justify-center'>
+        <Link to='category/new'>
+          <Button variant='ghost' className='mt-2'>
+            <CiCirclePlus size={24} />
+          </Button>
+        </Link>
+      </div>
     </>
   );
 }
