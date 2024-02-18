@@ -51,7 +51,7 @@ export default function CategoryPage() {
   return (
     <>
       <div
-        className='grid gap-4 overflow-y-auto'
+        className='flex flex-col gap-4 overflow-y-auto'
         style={{ height: "calc(100% - var(--header-height))" }}
       >
         {categories.map((category, index) => (
