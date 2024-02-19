@@ -98,7 +98,7 @@ export const action = async ({
 
   // 캐시 삭제
   await queryClient.invalidateQueries({
-    queryKey: ["chapter", { categoryId }],
+    queryKey: ["chapter"],
   });
 
   toast.success("생성되었습니다.");

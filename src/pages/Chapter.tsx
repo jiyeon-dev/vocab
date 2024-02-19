@@ -20,6 +20,14 @@ export default function ChapterPage() {
     staleTime: 5000,
   });
 
+  if (!id) {
+    return (
+      <div className='flex items-center justify-center h-full'>
+        <p className='text-center'>categoryId를 찾을 수 없습니다.</p>
+      </div>
+    );
+  }
+
   if (isError) {
     toast.error(`[${error.name}] ${error.message}`);
     return;
@@ -35,7 +43,7 @@ export default function ChapterPage() {
   ) => {
     const tagName: string = (event.target as HTMLDivElement).tagName;
     if (tagName === "BUTTON" || tagName === "path" || tagName === "svg") return;
-    else navigate(`/chapter?chapterId=${value.id}`);
+    else navigate(`/chapter?categoryId=${id}`);
     navigate(`/chapter/${value.name}?categoryId=${id}&chapterId=${value.id}`);
   };
 
@@ -52,7 +60,7 @@ export default function ChapterPage() {
             onClick={(event) => handleClick(event, value)}
           >
             <h1>{value.name}</h1>
-            <EditButton url={`chapter/edit?chapterId=${value.id}`} />
+            <EditButton url={`edit?chapterId=${value.id}`} />
           </div>
         ))}
       </div>

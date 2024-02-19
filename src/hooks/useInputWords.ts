@@ -2,18 +2,19 @@ import { useState, useRef, RefObject } from "react";
 import { toast } from "sonner";
 
 export type WordType = { name: string; meanings: string };
-export type InputWords = {
+export type InputWordsProps = {
   words: WordType[];
   wordRef: RefObject<HTMLInputElement>;
   meaningRef: RefObject<HTMLInputElement>;
   addWord: () => void;
   deleteWord: (item: WordType) => void;
 };
+export interface InputWords extends InputWordsProps {
+  setWords: (value: WordType[]) => void;
+}
 
-export default function useInputWords(
-  defaultValue: WordType[] = []
-): InputWords {
-  const [words, setWords] = useState<WordType[]>(defaultValue);
+export default function useInputWords(): InputWords {
+  const [words, setWords] = useState<WordType[]>([]);
   const wordRef = useRef<HTMLInputElement>(null);
   const meaningRef = useRef<HTMLInputElement>(null);
 
@@ -49,6 +50,7 @@ export default function useInputWords(
 
   return {
     words,
+    setWords,
     wordRef,
     meaningRef,
     addWord,

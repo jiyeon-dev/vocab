@@ -9,7 +9,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { MdOutlineCancel } from "react-icons/md";
-import { InputWords as InputWordsProps } from "@/hooks/useInputWords";
+import { InputWordsProps } from "@/hooks/useInputWords";
 
 export default function InputWordList({
   words,

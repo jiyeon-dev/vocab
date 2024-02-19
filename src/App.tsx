@@ -13,6 +13,10 @@ import EditCategory, {
   action as editCategoryAction,
 } from "./pages/EditCategory";
 import NewChapter, { action as newChapterAction } from "./pages/NewChapter";
+import EditChapter, {
+  action as editChapterAction,
+  loader as ChapterDetailLoader,
+} from "./pages/EditChapter";
 
 const router = createBrowserRouter([
   {
@@ -49,6 +53,13 @@ const router = createBrowserRouter([
         path: "new",
         element: <NewChapter />,
         action: newChapterAction,
+      },
+      {
+        path: "edit",
+        id: "chapter-detail",
+        element: <EditChapter />,
+        action: editChapterAction,
+        loader: ChapterDetailLoader,
       },
       {
         path: ":name",

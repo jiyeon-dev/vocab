@@ -28,4 +28,8 @@ export const validation = {
     if (image.size === 0 && image.name === "" && isChanged) return false;
     return true;
   },
+  array: (arr: object[]) => {
+    if (arr.length === 0) return false;
+    else return true;
+  },
 };

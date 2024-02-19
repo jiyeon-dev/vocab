@@ -13,13 +13,13 @@ export default function Carousel({ data }: { data: Vocabulary[] }) {
 
   const settings = useMemo<Settings>(
     () => ({
-      infinite: true,
+      infinite: data.length > 1 ? true : false,
       dots: false,
       speed: 300,
       arrows: false,
       beforeChange: (_: number, next: number) => setSlideIndex(next + 1),
     }),
-    []
+    [data]
   );
 
   const handleNext = () => {
