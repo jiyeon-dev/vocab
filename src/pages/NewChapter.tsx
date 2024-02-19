@@ -19,7 +19,7 @@ export default function NewChapter() {
   const isSubmitting = navigation.state === "submitting";
   const [searchParams] = useSearchParams();
   const categoryId = searchParams.get("categoryId");
-  const { words, wordRef, meaningRef, addWord, deleteWord } = useInputWords([]);
+  const { words, wordRef, meaningRef, addWord, deleteWord } = useInputWords();
   const submit = useSubmit();
 
   if (!categoryId) {
