@@ -1,5 +1,7 @@
 # Vocab
 
+- [회고글](https://itinerant.tistory.com/200)
+
 ## Live Demo
 
 Check out the live demo [here](https://react-vocab.vercel.app/)🚀.
