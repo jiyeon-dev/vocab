@@ -14,15 +14,18 @@ import {
   updateCategory,
   uploadImage,
 } from "@/util/http";
-import { useQuery } from "@tanstack/react-query";
-import { useEffect, useRef, useState } from "react";
+import { DocumentData } from "firebase/firestore";
+import { Suspense, useEffect, useRef, useState } from "react";
 import {
   Form,
   useNavigation,
   Link,
   redirect,
-  useSearchParams,
   useSubmit,
+  useRouteLoaderData,
+  json,
+  defer,
+  Await,
 } from "react-router-dom";
 import { toast } from "sonner";
 
@@ -32,18 +35,11 @@ export default function EditCategory() {
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
   const [imgPreview, setImgPreview] = useState<string>(NO_IMAGE);
-  const [searchParams] = useSearchParams();
-  const categoryId = searchParams.get("categoryId");
   const submit = useSubmit();
   const imgRef = useRef<HTMLInputElement>(null);
   const [isImageChanged, setIsImageChanged] = useState(false);
 
-  const { data, isPending, isError, error } = useQuery({
-    queryKey: ["category", { categoryId }],
-    queryFn: ({ queryKey }) =>
-      getCategory({ ...(queryKey[1] as { categoryId: string }) }),
-    staleTime: 60000,
-  });
+  const { data } = useRouteLoaderData("category-detail") as DocumentData;
 
   useEffect(() => {
     // 언마운트시 ObjectURL 삭제하여 메모리 누수 방지
@@ -69,17 +65,6 @@ export default function EditCategory() {
     if (data) fetchFile();
   }, [data]);
 
-  if (isPending) return <Loading />;
-  if (isError || !categoryId) {
-    const message = error?.message || "오류가 발생했습니다.";
-    toast.error(message);
-    return (
-      <div className='flex items-center justify-center h-full'>
-        <p className='text-center'>{message}</p>
-      </div>
-    );
-  }
-
   // 이미지 변경 시 미리보기 표시
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files: FileList | null = (event.target as HTMLInputElement).files;
@@ -90,7 +75,8 @@ export default function EditCategory() {
   };
 
   // 카테고리 삭제
-  const handleDelete = async () => {
+  const handleDelete = async (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
     const proceed = window.confirm("삭제하시겠습니까?");
     if (proceed) {
       submit(null, { method: "delete" });
@@ -106,68 +92,92 @@ export default function EditCategory() {
   };
 
   return (
-    <Form onSubmit={handleUpdate}>
-      <FormItem label='이름'>
-        <Input
-          type='text'
-          name='name'
-          placeholder='category'
-          maxLength={10}
-          defaultValue={data.name}
-          required
-        />
-      </FormItem>
-      <FormItem label='설명'>
-        <Textarea
-          placeholder='description'
-          name='description'
-          className='resize-none mt-1'
-          rows={4}
-          maxLength={50}
-          defaultValue={data.description}
-          required
-        />
-      </FormItem>
-      <FormItem label='이미지'>
-        <div className='flex items-start space-x-4'>
-          <div>
-            <InputImage
-              ref={imgRef}
-              name='image'
-              onChange={handleImageChange}
-              required
-            />
-            <span></span>
-          </div>
-          <img
-            id='preview'
-            className='object-cover w-24 h-24 rounded-sm'
-            src={imgPreview}
-            alt='Current profile photo'
-          />
-        </div>
-      </FormItem>
+    <>
+      <Suspense fallback={<Loading />}>
+        <Await resolve={data}>
+          {(data) => (
+            <Form onSubmit={handleUpdate}>
+              <FormItem label='이름'>
+                <Input
+                  type='text'
+                  name='name'
+                  placeholder='category'
+                  maxLength={10}
+                  defaultValue={data.name}
+                  required
+                />
+              </FormItem>
+              <FormItem label='설명'>
+                <Textarea
+                  placeholder='description'
+                  name='description'
+                  className='resize-none mt-1'
+                  rows={4}
+                  maxLength={50}
+                  defaultValue={data.description}
+                  required
+                />
+              </FormItem>
+              <FormItem label='이미지'>
+                <div className='flex items-start space-x-4'>
+                  <div>
+                    <InputImage
+                      ref={imgRef}
+                      name='image'
+                      onChange={handleImageChange}
+                      required
+                    />
+                    <span></span>
+                  </div>
+                  <img
+                    id='preview'
+                    className='object-cover w-24 h-24 rounded-sm'
+                    src={imgPreview}
+                    alt='Current profile photo'
+                  />
+                </div>
+              </FormItem>
 
-      <div className='flex justify-center space-x-4 mt-2'>
-        <Link to='..'>
-          <Button variant='outline' disabled={isSubmitting}>
-            Cancel
-          </Button>
-        </Link>
-        <Button
-          variant='destructive'
-          disabled={isSubmitting}
-          onClick={handleDelete}
-        >
-          {isSubmitting ? "Submitting..." : "Delete"}
-        </Button>
-        <Button type='submit' disabled={isSubmitting}>
-          {isSubmitting ? "Submitting..." : "Save"}
-        </Button>
-      </div>
-    </Form>
+              <div className='flex justify-center space-x-4 mt-2'>
+                <Link to='..'>
+                  <Button variant='outline' disabled={isSubmitting}>
+                    Cancel
+                  </Button>
+                </Link>
+                <Button
+                  variant='destructive'
+                  disabled={isSubmitting}
+                  onClick={handleDelete}
+                >
+                  {isSubmitting ? "Submitting..." : "Delete"}
+                </Button>
+                <Button type='submit' disabled={isSubmitting}>
+                  {isSubmitting ? "Submitting..." : "Save"}
+                </Button>
+              </div>
+            </Form>
+          )}
+        </Await>
+      </Suspense>
+
+      {isSubmitting && <Loading />}
+    </>
   );
 }
+
+export const loader = async ({ request }: { request: Request }) => {
+  const url = new URL(request.url);
+  const categoryId = url.searchParams.get("categoryId") || "";
+  if (!categoryId)
+    throw json(
+      { message: "카테고리 아이디를 찾을 수 없습니다." },
+      { status: 500 }
+    );
+
+  return defer({
+    data: await getCategory({ categoryId }),
+  });
+};
 
 export const action = async ({
   request,

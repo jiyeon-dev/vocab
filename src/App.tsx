@@ -11,6 +11,7 @@ import ErrorPage from "./pages/Error";
 import NewCategory, { action as newCategoryAction } from "./pages/NewCategory";
 import EditCategory, {
   action as editCategoryAction,
+  loader as categoryDetailLoader,
 } from "./pages/EditCategory";
 import NewChapter, { action as newChapterAction } from "./pages/NewChapter";
 import EditChapter, {
@@ -35,8 +36,10 @@ const router = createBrowserRouter([
       },
       {
         path: "category/edit",
+        id: "category-detail",
         element: <EditCategory />,
         action: editCategoryAction,
+        loader: categoryDetailLoader,
       },
     ],
   },
