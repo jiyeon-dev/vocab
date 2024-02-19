@@ -2,7 +2,7 @@
 
 ## Live Demo
 
-Check out the live demo here.
+Check out the live demo [here](https://react-vocab.vercel.app/)🚀.
 
 ## Package / Library
 
@@ -13,7 +13,7 @@ Check out the live demo here.
 - [shadcn/ui](https://ui.shadcn.com/)
 - [Tailwind](https://tailwindcss.com/)
 - [react-slick](https://react-slick.neostack.com/)
-- [react-table]()
+- [sonner](https://sonner.emilkowal.ski/)
 
 ## TODO
 
