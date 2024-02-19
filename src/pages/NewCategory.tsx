@@ -6,7 +6,7 @@ import {
   Textarea,
   InputImage,
 } from "@/components/ui/formItem";
-import { createCategory, uploadImage } from "@/util/http";
+import { createCategory, queryClient, uploadImage } from "@/util/http";
 import { useEffect, useState } from "react";
 import { Form, useNavigation, Link, redirect } from "react-router-dom";
 
@@ -98,6 +98,11 @@ export const action = async ({
     imageURL: uploadedImageResult as string,
   });
   if (!dataSaveResult) return null;
+
+  // 캐시 삭제
+  await queryClient.invalidateQueries({
+    queryKey: ["category"],
+  });
 
   return redirect("/");
 };

@@ -222,7 +222,7 @@ export const action = async ({
   }
 
   // 캐시 삭제
-  await queryClient.invalidateQueries({
+  queryClient.invalidateQueries({
     queryKey: ["category", { categoryId }],
   });
 
