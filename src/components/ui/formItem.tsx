@@ -1,10 +1,14 @@
 import React from "react";
 import { cn } from "@/lib/utils";
 
-type FormItemProps = { children: React.ReactNode; label?: string };
-export const FormItem = ({ children, label }: FormItemProps) => {
+type FormItemProps = {
+  children: React.ReactNode;
+  label?: string;
+  className?: string;
+};
+export const FormItem = ({ children, label, className }: FormItemProps) => {
   return (
-    <div className='my-4'>
+    <div className={cn("my-4", className)}>
       {label && (
         <label className='text-md font-bold leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 select-none ml-1'>
           {label}

@@ -15,6 +15,7 @@ import {
   getDoc,
   DocumentData,
   updateDoc,
+  writeBatch,
 } from "firebase/firestore";
 import { Chapter, Vocabulary } from "@/types";
 import {
@@ -227,6 +228,87 @@ export const updateCategory = async (
 export const deleteCategory = async (id: string): Promise<boolean> => {
   try {
     await deleteDoc(doc(db, "category", id));
+    return true;
+  } catch (error) {
+    toast.error((error as Error).message);
+    return false;
+  }
+};
+
+/**
+ * 챕터 생성
+ * @param data
+ * @returns
+ */
+export const createChapter = async (data: {
+  [k: string]: FormDataEntryValue;
+}): Promise<string> => {
+  // 같은 이름 존재 여부 확인
+  const q = query(
+    collection(db, "chapter"),
+    where("name", "==", data.name),
+    where("categoryId", "==", data.categoryId)
+  );
+  const querySnapshot = await getDocs(q);
+  if (querySnapshot.docs.length > 0) {
+    toast.error("동일한 이름의 챕터가 존재합니다.");
+    return "";
+  }
+
+  // 마지막 order 번호 조회
+  const chapters = await getChapters({ categoryId: data.categoryId as string });
+  const order =
+    chapters.length === 0 ? 1 : chapters[chapters.length - 1].order + 1;
+
+  try {
+    // 챕터 추가
+    const chapterRef = await addDoc(collection(db, "chapter"), {
+      categoryId: data.categoryId,
+      name: data.name,
+      order: order,
+      timestamp: serverTimestamp(),
+    });
+    return chapterRef.id;
+  } catch (error) {
+    toast.error((error as Error).message);
+    return "";
+  }
+};
+
+/**
+ * 보카 추가
+ * @param chapterId 챕터 아이디
+ * @param data 데이터 리스트
+ * @returns
+ */
+export const updateVocabulary = async (
+  chapterId: string,
+  data: object[]
+): Promise<boolean> => {
+  try {
+    const batch = writeBatch(db);
+
+    // 삭제
+    const q = query(
+      collection(db, "vocabulary"),
+      where("chapterId", "==", chapterId)
+    );
+    const querySnapshot = await getDocs(q);
+    querySnapshot.docs.map((item) => {
+      batch.delete(doc(db, "vocabulary", item.id));
+    });
+
+    // 추가
+    data.map((item) => {
+      const ref = doc(collection(db, "vocabulary")); // random id 생성되기 떄문에 매번 생성해줘야함.
+      batch.set(ref, {
+        chapterId: chapterId,
+        ...item,
+        timestamp: serverTimestamp(),
+      });
+    });
+
+    await batch.commit();
     return true;
   } catch (error) {
     toast.error((error as Error).message);

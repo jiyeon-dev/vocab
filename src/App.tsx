@@ -12,6 +12,7 @@ import NewCategory, { action as newCategoryAction } from "./pages/NewCategory";
 import EditCategory, {
   action as editCategoryAction,
 } from "./pages/EditCategory";
+import NewChapter, { action as newChapterAction } from "./pages/NewChapter";
 
 const router = createBrowserRouter([
   {
@@ -43,6 +44,11 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <ChapterPage />,
+      },
+      {
+        path: "new",
+        element: <NewChapter />,
+        action: newChapterAction,
       },
       {
         path: ":name",
