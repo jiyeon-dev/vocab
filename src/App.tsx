@@ -8,7 +8,10 @@ import ChapterPage from "./pages/Chapter";
 import { queryClient } from "./util/http";
 import VocabularyPage from "./pages/Vocabulary";
 import ErrorPage from "./pages/Error";
-import NewCategory, { action as categoryAction } from "./pages/NewCategory";
+import NewCategory, { action as newCategoryAction } from "./pages/NewCategory";
+import EditCategory, {
+  action as editCategoryAction,
+} from "./pages/EditCategory";
 
 const router = createBrowserRouter([
   {
@@ -23,7 +26,12 @@ const router = createBrowserRouter([
       {
         path: "category/new",
         element: <NewCategory />,
-        action: categoryAction,
+        action: newCategoryAction,
+      },
+      {
+        path: "category/edit",
+        element: <EditCategory />,
+        action: editCategoryAction,
       },
     ],
   },

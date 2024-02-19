@@ -1,11 +1,13 @@
 import { Category } from "@/types";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import EditButton from "./EditButton";
 
 type CategoryCardProps = {
   category: Category;
 };
 
 export default function CategoryCard({ category }: CategoryCardProps) {
+  const navigate = useNavigate();
   const style = {
     background: `url('${category?.imageURL}'), url('/no-image.jpeg')`,
     backgroundSize: "cover",
@@ -13,10 +15,16 @@ export default function CategoryCard({ category }: CategoryCardProps) {
     backgroundRepeat: "no-repeat",
   };
 
+  const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    const tagName: string = (event.target as HTMLDivElement).tagName;
+    if (tagName === "BUTTON" || tagName === "path" || tagName === "svg") return;
+    else navigate(`/chapter?categoryId=${category.id}`);
+  };
+
   return (
-    <Link
-      to={`/chapter?categoryId=${category.id}`}
-      className='grid grid-cols-3 grid-flow-col rounded-lg border bg-card text-card-foreground shadow-sm h-36'
+    <div
+      className='grid grid-cols-3 grid-flow-col rounded-lg border bg-card text-card-foreground shadow-sm h-36 relative cursor-pointer select-none'
+      onClick={handleClick}
     >
       <div className='h-36 rounded-s-lg' style={style}></div>
 
@@ -25,10 +33,12 @@ export default function CategoryCard({ category }: CategoryCardProps) {
           {category?.name}
         </h3>
 
-        <p className='text-sm text-muted-foreground mt-4 truncate whitespace-normal'>
+        <div className='text-sm text-muted-foreground mt-4 line-clamp-3'>
           {category?.description}
-        </p>
+        </div>
       </div>
-    </Link>
+
+      <EditButton url={`category/edit?categoryId=${category.id}`} />
+    </div>
   );
 }

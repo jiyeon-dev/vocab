@@ -10,11 +10,17 @@ import {
   where,
   addDoc,
   serverTimestamp,
+  deleteDoc,
+  doc,
+  getDoc,
+  DocumentData,
+  updateDoc,
 } from "firebase/firestore";
 import { Chapter, Vocabulary } from "@/types";
 import {
   deleteObject,
   getDownloadURL,
+  getMetadata,
   ref,
   uploadBytesResumable,
 } from "firebase/storage";
@@ -159,4 +165,71 @@ export const createCategory = async (data: {
     return false;
   }
   return true;
+};
+
+/**
+ * 카테고리 단건 조회
+ * @param id 카테고리 아이디
+ * @returns
+ */
+export const getCategory = async ({
+  categoryId,
+}: {
+  categoryId: string;
+}): Promise<DocumentData> => {
+  if (!categoryId) throw new Error("categoryId(이)가 없습니다.");
+  const snapshot = await getDoc(doc(db, "category", categoryId));
+  const img = await getMetadata(
+    ref(
+      storage,
+      "https://firebasestorage.googleapis.com/v0/b/react-voca-455e7.appspot.com/o/9788965421030.jpg?alt=media&token=41562718-59fc-4111-a2c3-fdfb365a5eba"
+    )
+  );
+  if (snapshot.exists()) {
+    return {
+      ...snapshot.data(),
+      metadata: img,
+    };
+  } else {
+    throw new Error("카테고리를 찾을 수 없습니다.");
+  }
+};
+
+/**
+ * 카테고리 수정
+ * @param data 데이터
+ * @param categoryId 카테고리 아이디
+ * @returns
+ */
+export const updateCategory = async (
+  categoryId: string,
+  data: {
+    [k: string]: FormDataEntryValue;
+  }
+): Promise<boolean> => {
+  try {
+    await updateDoc(doc(db, "category", categoryId), {
+      ...data,
+      timestamp: serverTimestamp(),
+    });
+  } catch (error) {
+    toast.error((error as Error).message);
+    return false;
+  }
+  return true;
+};
+
+/**
+ * 카테고리 삭제
+ * @param id 카테고리 아이디
+ * @returns
+ */
+export const deleteCategory = async (id: string): Promise<boolean> => {
+  try {
+    await deleteDoc(doc(db, "category", id));
+    return true;
+  } catch (error) {
+    toast.error((error as Error).message);
+    return false;
+  }
 };
