@@ -1,3 +1,4 @@
+import Loading from "@/components/Loader";
 import { Button } from "@/components/ui/button";
 import {
   FormItem,
@@ -29,49 +30,52 @@ export default function NewCategory() {
   }, [imgPreview]);
 
   return (
-    <Form method='post' encType='multipart/form-data'>
-      <FormItem label='이름'>
-        <Input
-          type='text'
-          name='name'
-          placeholder='category'
-          maxLength={10}
-          required
-        />
-      </FormItem>
-      <FormItem label='설명'>
-        <Textarea
-          placeholder='description'
-          name='description'
-          className='resize-none mt-1'
-          rows={4}
-          maxLength={50}
-          required
-        />
-      </FormItem>
-      <FormItem label='이미지'>
-        <div className='flex items-start space-x-4'>
-          <InputImage name='image' onChange={handleImageChange} required />
-          <img
-            id='preview'
-            className='object-cover w-24 h-24 rounded-sm'
-            src={imgPreview}
-            alt='Current profile photo'
+    <>
+      <Form method='post' encType='multipart/form-data'>
+        <FormItem label='이름'>
+          <Input
+            type='text'
+            name='name'
+            placeholder='category'
+            maxLength={10}
+            required
           />
-        </div>
-      </FormItem>
+        </FormItem>
+        <FormItem label='설명'>
+          <Textarea
+            placeholder='description'
+            name='description'
+            className='resize-none mt-1'
+            rows={4}
+            maxLength={50}
+            required
+          />
+        </FormItem>
+        <FormItem label='이미지'>
+          <div className='flex items-start space-x-4'>
+            <InputImage name='image' onChange={handleImageChange} required />
+            <img
+              id='preview'
+              className='object-cover w-24 h-24 rounded-sm'
+              src={imgPreview}
+              alt='Current profile photo'
+            />
+          </div>
+        </FormItem>
 
-      <div className='flex justify-center space-x-4 mt-2'>
-        <Link to='..'>
-          <Button variant='outline' disabled={isSubmitting}>
-            Cancel
+        <div className='flex justify-center space-x-4 mt-2'>
+          <Link to='..'>
+            <Button variant='outline' disabled={isSubmitting}>
+              Cancel
+            </Button>
+          </Link>
+          <Button type='submit' disabled={isSubmitting}>
+            {isSubmitting ? "Submitting..." : "Save"}
           </Button>
-        </Link>
-        <Button type='submit' disabled={isSubmitting}>
-          {isSubmitting ? "Submitting..." : "Save"}
-        </Button>
-      </div>
-    </Form>
+        </div>
+      </Form>
+      {isSubmitting && <Loading />}
+    </>
   );
 }
 

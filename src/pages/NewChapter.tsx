@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import useInputWords from "@/hooks/useInputWords";
 import { toast } from "sonner";
 import { createChapter, queryClient, updateVocabulary } from "@/util/http";
+import Loading from "@/components/Loader";
 
 export default function NewChapter() {
   const navigation = useNavigation();
@@ -44,36 +45,39 @@ export default function NewChapter() {
   };
 
   return (
-    <Form method='post' onSubmit={handleSubmit}>
-      <FormItem label='이름'>
-        <Input
-          type='text'
-          name='name'
-          placeholder='chapter'
-          maxLength={10}
-          required
+    <>
+      <Form method='post' onSubmit={handleSubmit}>
+        <FormItem label='이름'>
+          <Input
+            type='text'
+            name='name'
+            placeholder='chapter'
+            maxLength={10}
+            required
+          />
+        </FormItem>
+        <hr />
+        <InputWordList
+          words={words}
+          wordRef={wordRef}
+          meaningRef={meaningRef}
+          addWord={addWord}
+          deleteWord={deleteWord}
         />
-      </FormItem>
-      <hr />
-      <InputWordList
-        words={words}
-        wordRef={wordRef}
-        meaningRef={meaningRef}
-        addWord={addWord}
-        deleteWord={deleteWord}
-      />
 
-      <div className='flex justify-center space-x-4 mt-2'>
-        <Link to='..'>
-          <Button variant='outline' disabled={isSubmitting}>
-            Cancel
+        <div className='flex justify-center space-x-4 mt-2'>
+          <Link to='..'>
+            <Button variant='outline' disabled={isSubmitting}>
+              Cancel
+            </Button>
+          </Link>
+          <Button type='submit' disabled={isSubmitting}>
+            {isSubmitting ? "Submitting..." : "Save"}
           </Button>
-        </Link>
-        <Button type='submit' disabled={isSubmitting}>
-          {isSubmitting ? "Submitting..." : "Save"}
-        </Button>
-      </div>
-    </Form>
+        </div>
+      </Form>
+      {isSubmitting && <Loading />}
+    </>
   );
 }
 
