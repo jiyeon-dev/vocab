@@ -2,11 +2,11 @@ import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getChapters } from "@/util/http";
 import Loader from "@/components/Loader";
-import EditButton from "@/components/EditButton";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { CiCirclePlus } from "react-icons/ci";
 import { Chapter } from "@/types";
+import { Card, CardTitle } from "@/components/custom-ui/Card";
 
 export default function ChapterPage() {
   const [searchParams] = useSearchParams();
@@ -43,7 +43,6 @@ export default function ChapterPage() {
   ) => {
     const tagName: string = (event.target as HTMLDivElement).tagName;
     if (tagName === "BUTTON" || tagName === "path" || tagName === "svg") return;
-    else navigate(`/chapter?categoryId=${id}`);
     navigate(`/chapter/${value.name}?categoryId=${id}&chapterId=${value.id}`);
   };
 
@@ -54,14 +53,14 @@ export default function ChapterPage() {
         style={{ maxHeight: "calc(100% - var(--header-height))" }}
       >
         {data?.map((value) => (
-          <div
+          <Card
             key={value.id}
-            className='relative flex items-center justify-center rounded-lg border bg-card shadow-sm h-36 cursor-pointer'
+            editUrl={`edit?chapterId=${value.id}`}
+            className='flex items-center justify-center'
             onClick={(event) => handleClick(event, value)}
           >
-            <h1>{value.name}</h1>
-            <EditButton url={`edit?chapterId=${value.id}`} />
-          </div>
+            <CardTitle>{value.name}</CardTitle>
+          </Card>
         ))}
       </div>
 
